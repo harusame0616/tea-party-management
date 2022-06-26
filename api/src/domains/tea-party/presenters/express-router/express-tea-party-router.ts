@@ -2,6 +2,7 @@ import { LocalFileMemberRepository } from '@/domains/member/local-file-repositor
 import { requestWrapper } from '@/utils/presenter/request-handler';
 import { ParameterError } from 'errors/parameter-error';
 import Express from 'express';
+import { TeaPartyAbsenceUsecase } from '../../applications/tea-party-absence-usecase';
 import { TeaPartyCreateUsecase } from '../../applications/tea-party-create-usecase';
 import { SlackTeaPartyNotificationGateway } from '../../infrastructures/tea-party-notification-gateway/slack-tea-party-notification-gateway';
 import { LocalFileTeaPartyRepository } from '../../infrastructures/tea-party-repository/local-file-tea-party-repository';
@@ -33,15 +34,24 @@ router.post(
   })
 );
 
-router.post(
-  '/',
+router.put(
+  '/attendance',
   requestWrapper(async (req) => {
-    const { eventDate } = req.body;
+    const { eventDate, chatId, attendance } = req.query;
 
-    if (typeof eventDate !== 'string') {
+    if (
+      typeof eventDate !== 'string' ||
+      typeof chatId !== 'string' ||
+      attendance !== 'absence'
+    ) {
       throw new ParameterError('パラメーターが不正です');
     }
 
-    await teaPartyCreateUsecase.execute({ eventDate });
+    const teaPartyAbsenceUsecase = new TeaPartyAbsenceUsecase({
+      teaPartyRepository: new LocalFileTeaPartyRepository(),
+      memberRepository: new LocalFileMemberRepository(),
+    });
+
+    await teaPartyAbsenceUsecase.execute({ eventDate, chatId });
   })
 );
