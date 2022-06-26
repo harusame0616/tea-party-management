@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ./api
+    volumes:
+      - ./:/project:delegated
+    ports:
+      - 50000:3000
+    environment:
+      - INCOMMING_WEB_HOOK=${INCOMMING_WEB_HOOK}
