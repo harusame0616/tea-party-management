@@ -24,4 +24,24 @@ export class LocalFileMemberRepository implements MemberRepository {
       Member.reconstruct(memberDto)
     );
   }
+
+  async findOneByChatId(chatId: string): Promise<Member | null> {
+    const data = await (async () => {
+      try {
+        return (await fs.readFile(LocalFileMemberRepository.FILE))?.toString();
+      } catch (error: any) {
+        if (error.code === 'ENOENT') {
+          return null;
+        }
+        throw error;
+      }
+    })();
+
+    const member = data ? JSON.parse(data) : { members: [] };
+    const memberDtoOfChatId = member.members?.find(
+      (memberDto: MemberDto) => memberDto.chatId === chatId
+    );
+
+    return memberDtoOfChatId ? Member.reconstruct(memberDtoOfChatId) : null;
+  }
 }

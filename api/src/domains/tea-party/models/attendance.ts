@@ -25,6 +25,10 @@ export class Attendance {
     return new Attendance(param);
   }
 
+  absent() {
+    this.param.status = 'absence';
+  }
+
   get memberId() {
     return this.param.memberId;
   }
