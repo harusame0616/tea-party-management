@@ -1,51 +1,21 @@
-import { MemberRepository } from 'domains/member/member-repository';
-import { Member } from 'domains/member/models/member';
-import { TeaPartyCreateUsecase } from 'domains/tea-party/applications/tea-party-create-usecase';
-import { TeaPartyNotificationGateway } from 'domains/tea-party/applications/tea-party-notification-gateway';
-import { TeaPartyRepository } from 'domains/tea-party/applications/tea-party-repository';
-import { EventDate } from 'domains/tea-party/models/event-date';
-import { TeaParty, TeaPartyDto } from 'domains/tea-party/models/tea-party';
-import { ConflictError } from 'errors/conflict-error';
-import { ParameterError } from 'errors/parameter-error';
+import { Member } from '@/domains/member/models/member';
+import { TeaPartyCreateUsecase } from '@/domains/tea-party/applications/tea-party-create-usecase';
+import { ConflictError } from '@/errors/conflict-error';
+import { ParameterError } from '@/errors/parameter-error';
+import { ForTestTeaPartyRepository } from './mocs/for-test-tea-party-repository';
+import { ForTestMemberRepository } from './mocs/for-test-member-repository';
+import { ForTestTeaPartyNotificationGateway } from './mocs/for-test-tea-party-notification-gateway';
 
-class ForTestTeaPartyRepository implements TeaPartyRepository {
-  teaParties: TeaPartyDto[] = [];
-
-  async insert(newTeaParty: TeaParty): Promise<void> {
-    const dto = newTeaParty.toDto();
-    this.teaParties.push(dto);
-  }
-
-  async findOneByEventDate(eventDate: EventDate): Promise<TeaParty | null> {
-    const teaPartyDto = this.teaParties.find(
-      (teaParty) =>
-        EventDate.reconstruct({ eventDate: teaParty.eventDate }).eventDate ===
-        eventDate.eventDate
-    );
-
-    return teaPartyDto ? TeaParty.reconstruct(teaPartyDto) : null;
-  }
-}
-
-class ForTestMemberRepository implements MemberRepository {
-  constructor(public members: Member[]) {}
-  async listAll(): Promise<Member[]> {
-    return this.members;
-  }
-}
-class ForTestTeaPartyNotificationGateway
-  implements TeaPartyNotificationGateway
-{
-  isCalled = false;
-  async notifyAttendanceConfirmation(teaParty: TeaParty): Promise<void> {
-    this.isCalled = true;
-  }
-}
+const memberList = [
+  ['斉藤ゆかり', 'chatId01'],
+  ['緒方健二', 'chatId02'],
+  ['山田浩一', 'chatId03'],
+];
 
 // ********************  正常系テストケース  ********************
 describe('正常系', () => {
-  const members = ['斉藤ゆかり', '緒方健二', '山田浩一'].map((name) =>
-    Member.create({ name })
+  const members = memberList.map(([name, chatId]) =>
+    Member.create({ name, chatId })
   );
 
   let teaPartyRepository: ForTestTeaPartyRepository;
@@ -86,8 +56,8 @@ describe('正常系', () => {
 
 // ********************  異常系テストケース  ********************
 describe('異常系', () => {
-  const members = ['斉藤ゆかり', '緒方健二', '山田浩一'].map((name) =>
-    Member.create({ name })
+  const members = memberList.map(([name, chatId]) =>
+    Member.create({ name, chatId })
   );
 
   let teaPartyRepository: ForTestTeaPartyRepository;

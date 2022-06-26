@@ -37,6 +37,17 @@ export class TeaParty {
     });
   }
 
+  absent(memberId: MemberId) {
+    const attendance = this.param.attendances.find((attendance) =>
+      attendance.memberId.equals(memberId)
+    );
+    if (!attendance) {
+      throw new NotFoundError('メンバー');
+    }
+
+    attendance.absent();
+  }
+
   toDto(): TeaPartyDto {
     return {
       teaPartyId: this.param.teaPartyId.value.teaPartyId,
