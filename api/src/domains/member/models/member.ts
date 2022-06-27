@@ -4,10 +4,12 @@ import { MemberId } from './memberId';
 export interface MemberParam {
   memberId: MemberId;
   name: string;
+  chatId: string;
 }
 export interface MemberDto {
   memberId: string;
   name: string;
+  chatId: string;
 }
 
 export class Member {
@@ -41,10 +43,15 @@ export class Member {
     this.param.name = name;
   }
 
+  public get chatId() {
+    return this.param.chatId;
+  }
+
   toDto(): MemberDto {
     return {
       memberId: this.param.memberId.memberId,
       name: this.param.name,
+      chatId: this.param.chatId,
     };
   }
 
@@ -52,6 +59,7 @@ export class Member {
     return new Member({
       memberId: MemberId.reconstruct({ memberId: memberDto.memberId }),
       name: memberDto.name,
+      chatId: memberDto.chatId,
     });
   }
 }
