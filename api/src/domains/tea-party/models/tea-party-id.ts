@@ -5,12 +5,18 @@ export interface TeaPartyIdParam {
   teaPartyId: string;
 }
 
+export interface TeaPartyIdDto extends TeaPartyIdParam {}
+
 export class TeaPartyId extends ValueObject<TeaPartyIdParam> {
   static generate() {
     return new TeaPartyId({ teaPartyId: uuidv7() });
   }
 
-  static reconstruct(param: TeaPartyIdParam) {
+  static create(param: TeaPartyIdParam) {
+    return new TeaPartyId({ teaPartyId: param.teaPartyId });
+  }
+
+  static reconstruct(param: TeaPartyIdDto) {
     return new TeaPartyId(param);
   }
 
