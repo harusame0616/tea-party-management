@@ -11,3 +11,11 @@ services:
     environment:
       - INCOMMING_WEB_HOOK=${INCOMMING_WEB_HOOK}
       - GCP_KEY_FILENAME=${GCP_KEY_FILENAME}
+  slack-event-handler:
+    build:
+      context: ./slack-event-handler
+      target: develop
+    volumes:
+      - ./:/project:delegated
+    ports:
+      - 50010:3000
