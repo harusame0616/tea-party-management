@@ -1,11 +1,11 @@
-import { LocalFileMemberRepository } from '@/domains/member/local-file-repository/local-file-member-repository';
+import { MemberRepositoryFactory } from '@/factory/member-repository-factory';
+import { TeaPartyNotificationGatewayFactory } from '@/factory/tea-party-notification-gateway-factory';
 import { requestWrapper } from '@/utils/presenter/request-handler';
 import { ParameterError } from 'errors/parameter-error';
 import Express from 'express';
+import { TeaPartyRepositoryFactory } from '../../../../factory/tea-party-repository-factory';
 import { TeaPartyAbsenceUsecase } from '../../applications/tea-party-absence-usecase';
 import { TeaPartyCreateUsecase } from '../../applications/tea-party-create-usecase';
-import { SlackTeaPartyNotificationGateway } from '../../infrastructures/tea-party-notification-gateway/slack-tea-party-notification-gateway';
-import { LocalFileTeaPartyRepository } from '../../infrastructures/tea-party-repository/local-file-tea-party-repository';
 
 export const router = Express.Router();
 
@@ -23,11 +23,9 @@ router.post(
     }
 
     const teaPartyCreateUsecase = new TeaPartyCreateUsecase(
-      new LocalFileTeaPartyRepository(),
-      new LocalFileMemberRepository(),
-      new SlackTeaPartyNotificationGateway({
-        incommingWebHook: process.env.INCOMMING_WEB_HOOK,
-      })
+      TeaPartyRepositoryFactory.getInstance(),
+      MemberRepositoryFactory.getInstance(),
+      TeaPartyNotificationGatewayFactory.getInstance()
     );
 
     await teaPartyCreateUsecase.execute({ eventDate });
@@ -48,8 +46,8 @@ router.put(
     }
 
     const teaPartyAbsenceUsecase = new TeaPartyAbsenceUsecase({
-      teaPartyRepository: new LocalFileTeaPartyRepository(),
-      memberRepository: new LocalFileMemberRepository(),
+      teaPartyRepository: TeaPartyRepositoryFactory.getInstance(),
+      memberRepository: MemberRepositoryFactory.getInstance(),
     });
 
     await teaPartyAbsenceUsecase.execute({ eventDate, chatId });

@@ -1,4 +1,4 @@
-import { ConflictError } from 'errors/conflict-error';
+import { ConflictError } from '@/errors/conflict-error';
 import { MemberRepository } from '../../member/member-repository';
 import { TeaPartyCreateService } from '../domain-services/tea-party-create-service';
 import { EventDate } from '../models/event-date';

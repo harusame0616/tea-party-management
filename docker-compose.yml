@@ -10,3 +10,4 @@ services:
       - 50000:3000
     environment:
       - INCOMMING_WEB_HOOK=${INCOMMING_WEB_HOOK}
+      - GCP_KEY_FILENAME=${GCP_KEY_FILENAME}
