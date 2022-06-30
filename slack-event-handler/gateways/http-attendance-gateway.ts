@@ -1,0 +1,4 @@
+class HttpAttendanceGateway implements HttpAttendanceGateway{
+
+
+}
