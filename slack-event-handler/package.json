@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@google-cloud/functions-framework": "^3.1.2",
     "@types/node": "^18.0.0",
     "@types/webpack-node-externals": "^2.5.3",
     "ts-loader": "^9.3.1",
