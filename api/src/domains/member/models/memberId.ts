@@ -1,4 +1,4 @@
-import { ValueObject } from 'domains/common/value-object';
+import { ValueObject } from '@/domains/common/value-object';
 import { uuidv7 as uuid } from 'uuidv7';
 
 interface MemberIdParam {

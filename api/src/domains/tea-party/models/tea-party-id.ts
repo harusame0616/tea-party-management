@@ -1,5 +1,5 @@
 import { uuidv7 } from 'uuidv7';
-import { ValueObject } from 'domains/common/value-object';
+import { ValueObject } from '@/domains/common/value-object';
 
 export interface TeaPartyIdParam {
   teaPartyId: string;

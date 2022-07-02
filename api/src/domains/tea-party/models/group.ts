@@ -1,4 +1,4 @@
-import { MemberId } from 'domains/member/models/memberId';
+import { MemberId } from '@/domains/member/models/memberId';
 
 export interface GroupParam {
   memberIds: MemberId[];
