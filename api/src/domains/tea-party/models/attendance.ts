@@ -1,7 +1,7 @@
 import { ParameterError } from '@/errors/parameter-error';
 import { MemberId } from '@/domains/member/models/memberId';
 
-export const statusList = ['participation', 'absence'] as const;
+export const statusList = ['attendance', 'absence'] as const;
 export type Status = typeof statusList[number];
 
 export interface AttendanceParam {
@@ -23,6 +23,10 @@ export class Attendance {
 
   static create(param: AttendanceParam) {
     return new Attendance(param);
+  }
+
+  attend() {
+    this.param.status = 'attendance';
   }
 
   absent() {
