@@ -35,7 +35,7 @@ router.post(
 router.put(
   '/attendance',
   requestWrapper(async (req) => {
-    const { eventDate, chatId, attendance } = req.query;
+    const { eventDate, chatId, attendance } = req.body;
 
     if (
       typeof eventDate !== 'string' ||
