@@ -1,4 +1,4 @@
-import { ParameterError } from 'errors/parameter-error';
+import { ParameterError } from '@/errors/parameter-error';
 import { MemberId } from './memberId';
 
 export interface MemberParam {

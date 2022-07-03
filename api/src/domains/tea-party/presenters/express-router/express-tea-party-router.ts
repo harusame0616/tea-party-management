@@ -1,7 +1,7 @@
 import { MemberRepositoryFactory } from '@/factory/member-repository-factory';
 import { TeaPartyNotificationGatewayFactory } from '@/factory/tea-party-notification-gateway-factory';
 import { requestWrapper } from '@/utils/presenter/request-handler';
-import { ParameterError } from 'errors/parameter-error';
+import { ParameterError } from '@/errors/parameter-error';
 import Express from 'express';
 import { TeaPartyRepositoryFactory } from '../../../../factory/tea-party-repository-factory';
 import { TeaPartyAbsenceUsecase } from '../../applications/tea-party-absence-usecase';
@@ -35,7 +35,7 @@ router.post(
 router.put(
   '/attendance',
   requestWrapper(async (req) => {
-    const { eventDate, chatId, attendance } = req.query;
+    const { eventDate, chatId, attendance } = req.body;
 
     if (
       typeof eventDate !== 'string' ||

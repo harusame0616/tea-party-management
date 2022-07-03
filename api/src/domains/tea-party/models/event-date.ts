@@ -1,5 +1,5 @@
-import { ValueObject } from 'domains/common/value-object';
-import { ParameterError } from 'errors/parameter-error';
+import { ValueObject } from '@/domains/common/value-object';
+import { ParameterError } from '@/errors/parameter-error';
 
 export interface EventDateParam {
   eventDate: Date;

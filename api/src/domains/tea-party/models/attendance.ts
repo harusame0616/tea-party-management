@@ -1,5 +1,5 @@
-import { ParameterError } from 'errors/parameter-error';
-import { MemberId } from 'domains/member/models/memberId';
+import { ParameterError } from '@/errors/parameter-error';
+import { MemberId } from '@/domains/member/models/memberId';
 
 export const statusList = ['participation', 'absence'] as const;
 export type Status = typeof statusList[number];

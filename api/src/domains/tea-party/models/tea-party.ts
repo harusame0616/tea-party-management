@@ -1,4 +1,4 @@
-import { MemberId } from 'domains/member/models/memberId';
+import { MemberId } from '@/domains/member/models/memberId';
 import { NotFoundError } from '../../../errors/not-found-error';
 import { Attendance, AttendanceDto } from './attendance';
 import { EventDate } from './event-date';
