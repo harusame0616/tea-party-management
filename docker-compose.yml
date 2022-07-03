@@ -4,6 +4,7 @@ services:
   api:
     build:
       context: ./api
+      target: develop
     volumes:
       - ./:/project:delegated
     ports:

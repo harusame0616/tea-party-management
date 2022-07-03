@@ -30,11 +30,22 @@ export class TeaParty {
     return new TeaParty({
       ...param,
       attendances: param.memberIdList.map(
-        (memberId) => Attendance.create({ memberId, status: 'participation' }) // 作成時は出席状態で登録する。
+        (memberId) => Attendance.create({ memberId, status: 'attendance' }) // 作成時は出席状態で登録する。
       ),
       teaPartyId: TeaPartyId.generate(),
       groups: [], //作成時にはグループなし
     });
+  }
+
+  attend(memberId: MemberId) {
+    const attendance = this.param.attendances.find((attendance) =>
+      attendance.memberId.equals(memberId)
+    );
+    if (!attendance) {
+      throw new NotFoundError('メンバー');
+    }
+
+    attendance.attend();
   }
 
   absent(memberId: MemberId) {

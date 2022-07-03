@@ -46,7 +46,7 @@ describe('正常系', () => {
         attendances: expect.arrayContaining(
           members.map((member) => ({
             memberId: member.memberId.memberId,
-            status: 'participation', // 作成時は全員「参加」状態であること
+            status: 'attendance', // 作成時は全員「参加」状態であること
           }))
         ),
       });

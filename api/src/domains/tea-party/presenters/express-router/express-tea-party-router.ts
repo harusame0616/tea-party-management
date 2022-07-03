@@ -6,6 +6,7 @@ import Express from 'express';
 import { TeaPartyRepositoryFactory } from '../../../../factory/tea-party-repository-factory';
 import { TeaPartyAbsenceUsecase } from '../../applications/tea-party-absence-usecase';
 import { TeaPartyCreateUsecase } from '../../applications/tea-party-create-usecase';
+import { TeaPartyAttendanceUsecase } from '../../applications/tea-party-attendance-usecase';
 
 export const router = Express.Router();
 
@@ -40,16 +41,30 @@ router.put(
     if (
       typeof eventDate !== 'string' ||
       typeof chatId !== 'string' ||
-      attendance !== 'absence'
+      !['absence', 'attendance'].includes(attendance)
     ) {
       throw new ParameterError('パラメーターが不正です');
     }
 
-    const teaPartyAbsenceUsecase = new TeaPartyAbsenceUsecase({
-      teaPartyRepository: TeaPartyRepositoryFactory.getInstance(),
-      memberRepository: MemberRepositoryFactory.getInstance(),
-    });
+    const teapartyAttendanceChangeUsecase = (() => {
+      const teaPartyRepository = TeaPartyRepositoryFactory.getInstance();
+      const memberRepository = MemberRepositoryFactory.getInstance();
 
-    await teaPartyAbsenceUsecase.execute({ eventDate, chatId });
+      if (attendance === 'absence') {
+        return new TeaPartyAbsenceUsecase({
+          teaPartyRepository,
+          memberRepository,
+        });
+      } else if (attendance === 'attendance') {
+        return new TeaPartyAttendanceUsecase({
+          teaPartyRepository,
+          memberRepository,
+        });
+      } else {
+        throw new Error('never route: attendance condition');
+      }
+    })();
+
+    await teapartyAttendanceChangeUsecase.execute({ eventDate, chatId });
   })
 );

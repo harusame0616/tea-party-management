@@ -1,5 +1,5 @@
 import { Member, MemberDto } from '@/domains/member/models/member';
-import { TeaPartyAbsenceUsecase } from '@/domains/tea-party/applications/tea-party-absence-usecase';
+import { TeaPartyAttendanceUsecase } from '@/domains/tea-party/applications/tea-party-attendance-usecase';
 import { AttendanceDto } from '@/domains/tea-party/models/attendance';
 import { NotFoundError } from '@/errors/not-found-error';
 import { ForTestMemberRepository } from './mocs/for-test-member-repository';
@@ -7,7 +7,7 @@ import { ForTestTeaPartyRepository } from './mocs/for-test-tea-party-repository'
 
 let teaPartyRepository: ForTestTeaPartyRepository;
 let memberRepository: ForTestMemberRepository;
-let absenceUsecase: TeaPartyAbsenceUsecase;
+let attendanceUsecase: TeaPartyAttendanceUsecase;
 const initializeRepository = () => {
   teaPartyRepository = new ForTestTeaPartyRepository([
     {
@@ -58,7 +58,7 @@ const initializeRepository = () => {
       },
     ].map((memberDto) => Member.reconstruct(memberDto as MemberDto))
   );
-  absenceUsecase = new TeaPartyAbsenceUsecase({
+  attendanceUsecase = new TeaPartyAttendanceUsecase({
     teaPartyRepository,
     memberRepository,
   });
@@ -70,8 +70,8 @@ const eventDate = '2022-07-20';
 describe('正常系', () => {
   beforeEach(initializeRepository);
 
-  it('欠席にできる', async () => {
-    await absenceUsecase.execute({
+  it('出席にできる', async () => {
+    await attendanceUsecase.execute({
       eventDate,
       chatId,
     });
@@ -91,17 +91,17 @@ describe('正常系', () => {
 
     expect(attendance).toEqual<AttendanceDto>({
       memberId,
-      status: 'absence',
+      status: 'attendance',
     });
   });
 
-  it('既に欠席済みのメンバーを再度欠席にする。', async () => {
+  it('既に出席済みのメンバーを再度出席にする。', async () => {
     const memberId = '000001';
-    await absenceUsecase.execute({
+    await attendanceUsecase.execute({
       eventDate: '2022-07-20',
       chatId,
     });
-    await absenceUsecase.execute({
+    await attendanceUsecase.execute({
       eventDate: '2022-07-20',
       chatId,
     });
@@ -122,7 +122,7 @@ describe('正常系', () => {
 
     expect(attendance).toEqual<AttendanceDto>({
       memberId,
-      status: 'absence',
+      status: 'attendance',
     });
   });
 });
@@ -132,16 +132,16 @@ describe('異常系', () => {
 
   it('開催日にお茶会が存在しない', async () => {
     await expect(
-      absenceUsecase.execute({
+      attendanceUsecase.execute({
         eventDate: '2000-07-10',
         chatId,
       })
     ).rejects.toThrow(new NotFoundError('お茶会'));
   });
 
-  it('出欠に未登録のメンバーID', async () => {
+  it('未登録のメンバーID', async () => {
     await expect(
-      absenceUsecase.execute({
+      attendanceUsecase.execute({
         eventDate,
         chatId: '000014',
       })
