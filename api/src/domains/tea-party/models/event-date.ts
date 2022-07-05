@@ -49,4 +49,25 @@ export class EventDate extends ValueObject<EventDateParam> {
   get eventDate() {
     return this._value.eventDate.toUTCString();
   }
+
+  static mostRecent(today: Date) {
+    const eventDate = new Date(today.getTime());
+
+    while (true) {
+      try {
+        return EventDate.create(
+          `${eventDate.getFullYear()}-${(
+            '0' +
+            (eventDate.getMonth() + 1)
+          ).slice(-2)}-${('0' + eventDate.getDate()).slice(-2)}`
+        );
+      } catch (err: any) {
+        if (err.message !== '開催日が異常です。') {
+          throw err;
+        }
+      }
+
+      eventDate.setDate(eventDate.getDate() + 1);
+    }
+  }
 }
