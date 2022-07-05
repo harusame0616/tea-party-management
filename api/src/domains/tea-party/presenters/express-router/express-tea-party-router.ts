@@ -7,6 +7,7 @@ import { TeaPartyRepositoryFactory } from '../../../../factory/tea-party-reposit
 import { TeaPartyAbsenceUsecase } from '../../applications/tea-party-absence-usecase';
 import { TeaPartyCreateUsecase } from '../../applications/tea-party-create-usecase';
 import { TeaPartyAttendanceUsecase } from '../../applications/tea-party-attendance-usecase';
+import { TeaPartyCreateMostRecentUsecase } from '../../applications/tea-party-create-most-recent-usecase';
 
 export const router = Express.Router();
 
@@ -15,7 +16,7 @@ router.post(
   requestWrapper(async (req) => {
     const { eventDate } = req.body;
 
-    if (typeof eventDate !== 'string') {
+    if (typeof eventDate !== 'string' && eventDate != null) {
       throw new ParameterError('パラメーターが不正です');
     }
 
@@ -23,13 +24,21 @@ router.post(
       throw new Error('Slack用の環境変数が未設定です。');
     }
 
-    const teaPartyCreateUsecase = new TeaPartyCreateUsecase(
-      TeaPartyRepositoryFactory.getInstance(),
-      MemberRepositoryFactory.getInstance(),
-      TeaPartyNotificationGatewayFactory.getInstance()
-    );
-
-    await teaPartyCreateUsecase.execute({ eventDate });
+    if (eventDate) {
+      const usecase = new TeaPartyCreateUsecase(
+        TeaPartyRepositoryFactory.getInstance(),
+        MemberRepositoryFactory.getInstance(),
+        TeaPartyNotificationGatewayFactory.getInstance()
+      );
+      await usecase.execute({ eventDate });
+    } else {
+      const usecase = new TeaPartyCreateMostRecentUsecase(
+        TeaPartyRepositoryFactory.getInstance(),
+        MemberRepositoryFactory.getInstance(),
+        TeaPartyNotificationGatewayFactory.getInstance()
+      );
+      await usecase.execute({ today: new Date() });
+    }
   })
 );
 
