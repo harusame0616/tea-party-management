@@ -1,5 +1,5 @@
+import { MemberRepository } from '@/domains/member/applications/member-repository';
 import { GcsMemberRepository } from '@/domains/member/infrastructures/gcs-member-repository';
-import { MemberRepository } from '@/domains/member/member-repository';
 
 export class MemberRepositoryFactory {
   private static repository: MemberRepository;
