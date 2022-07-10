@@ -8,6 +8,18 @@ const LISTEN_HOST = process.env.HOST ?? '0.0.0.0';
   const app = Express();
   app.use(Express.json());
 
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+
+    if (req.method === 'OPTIONS') {
+      return res.status(200).send();
+    }
+
+    next();
+  });
+
   app.use('/teaparty', teaPartyRouter);
 
   app.listen(LISTEN_PORT, LISTEN_HOST, () => {
