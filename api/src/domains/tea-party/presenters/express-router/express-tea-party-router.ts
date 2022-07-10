@@ -8,8 +8,27 @@ import { TeaPartyAbsenceUsecase } from '../../applications/tea-party-absence-use
 import { TeaPartyCreateUsecase } from '../../applications/tea-party-create-usecase';
 import { TeaPartyAttendanceUsecase } from '../../applications/tea-party-attendance-usecase';
 import { TeaPartyCreateMostRecentUsecase } from '../../applications/tea-party-create-most-recent-usecase';
+import { TeaPartyDetailQuery } from '../../applications/tea-party-detail-query';
+import { TeaPartyQueryFactory } from '@/factory/tea-party-query-factory';
 
 export const router = Express.Router();
+
+router.get(
+  '/',
+  requestWrapper(async (req) => {
+    const { eventDate } = req.query;
+
+    if (typeof eventDate !== 'string' || eventDate == null) {
+      throw new ParameterError('パラメーターが不正です');
+    }
+
+    const query = new TeaPartyDetailQuery({
+      teaPartyQuery: TeaPartyQueryFactory.getInstance(),
+    });
+
+    return await query.execute(eventDate);
+  })
+);
 
 router.post(
   '/',
