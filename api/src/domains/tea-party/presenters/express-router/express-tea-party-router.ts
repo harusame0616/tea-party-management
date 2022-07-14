@@ -10,6 +10,7 @@ import { TeaPartyAttendanceUsecase } from '../../applications/tea-party-attendan
 import { TeaPartyCreateMostRecentUsecase } from '../../applications/tea-party-create-most-recent-usecase';
 import { TeaPartyDetailQuery } from '../../applications/tea-party-detail-query';
 import { TeaPartyQueryFactory } from '@/factory/tea-party-query-factory';
+import { TeaPartyListEventDateQueryUsecase } from '../../applications/tea-party-list-event-date-query-usecase';
 
 export const router = Express.Router();
 
@@ -18,7 +19,7 @@ router.get(
   requestWrapper(async (req) => {
     const { eventDate } = req.query;
 
-    if (typeof eventDate !== 'string' || eventDate == null) {
+    if (typeof eventDate !== 'string') {
       throw new ParameterError('パラメーターが不正です');
     }
 
@@ -27,6 +28,17 @@ router.get(
     });
 
     return await query.execute(eventDate);
+  })
+);
+
+router.get(
+  '/event_dates',
+  requestWrapper(async () => {
+    const query = new TeaPartyListEventDateQueryUsecase({
+      teaPartyQuery: TeaPartyQueryFactory.getInstance(),
+    });
+
+    return await query.execute();
   })
 );
 

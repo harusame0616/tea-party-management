@@ -10,6 +10,10 @@ const LISTEN_HOST = process.env.HOST ?? '0.0.0.0';
   app.use(Express.json());
 
   app.use((req, res, next) => {
+    console.log(req.url);
+    next();
+  });
+  app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET');
     res.header('Access-Control-Allow-Headers', 'Content-Type');

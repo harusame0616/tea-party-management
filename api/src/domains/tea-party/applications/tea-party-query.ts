@@ -21,4 +21,6 @@ export interface TeaPartyQuery {
   teaPartyDetailByEventDate(
     eventDate: EventDate
   ): Promise<TeaPartyDetailDto | null>;
+
+  listEventDate(): Promise<Date[]>;
 }

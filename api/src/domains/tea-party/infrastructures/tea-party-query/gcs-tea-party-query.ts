@@ -28,6 +28,13 @@ export class GcsTeaPartyQuery implements TeaPartyQuery {
     ).bucket(param.bucketName);
   }
 
+  async listEventDate(): Promise<Date[]> {
+    const [files] = await this.bucket.getFiles({ prefix: this.basePath });
+    return files.map(
+      (file) => new Date(parseInt(path.basename(file.name, '.json')))
+    );
+  }
+
   async teaPartyDetailByEventDate(
     eventDate: EventDate
   ): Promise<TeaPartyDetailDto | null> {
