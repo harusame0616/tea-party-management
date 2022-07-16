@@ -1,11 +1,10 @@
+import { MemberRepository } from '@/domains/member/applications/member-repository';
 import { ConflictError } from '@/errors/conflict-error';
 import { NotFoundError } from '@/errors/not-found-error';
-import { MemberRepository } from '../../member/member-repository';
 import { TeaPartyCreateService } from '../domain-services/tea-party-create-service';
 import { EventDate } from '../models/event-date';
 import { TeaPartyNotificationGateway } from './tea-party-notification-gateway';
 import { TeaPartyRepository } from './tea-party-repository';
-
 
 interface TeaPartyCreateMostRecentUsecaseExecuteParam {
   today: Date;
@@ -15,8 +14,8 @@ export class TeaPartyCreateMostRecentUsecase {
   constructor(
     private teaPartyRepository: TeaPartyRepository,
     private memberRepository: MemberRepository,
-    private teaPartyNotificationGateway: TeaPartyNotificationGateway,
-  ) { }
+    private teaPartyNotificationGateway: TeaPartyNotificationGateway
+  ) {}
 
   async execute(param: TeaPartyCreateMostRecentUsecaseExecuteParam) {
     const teaPartyCreateService = new TeaPartyCreateService(

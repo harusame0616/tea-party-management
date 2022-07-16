@@ -1,4 +1,4 @@
-import { Member } from './models/member';
+import { Member } from '../models/member';
 
 export interface MemberRepository {
   listAll(): Promise<Member[]>;

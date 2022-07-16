@@ -1,4 +1,5 @@
 import { MemberId } from '@/domains/member/models/memberId';
+import { ParameterError } from '@/errors/parameter-error';
 import { NotFoundError } from '../../../errors/not-found-error';
 import { Attendance, AttendanceDto } from './attendance';
 import { EventDate } from './event-date';
@@ -57,6 +58,35 @@ export class TeaParty {
     }
 
     attendance.absent();
+  }
+
+  setGroups(groups: Group[]) {
+    const memberIds = groups.flatMap((group) => group.memberIds);
+    const attendanceMemberIds = this.param.attendances.filter(
+      (attendance) => attendance.status === 'attendance'
+    );
+    const attendanceMemberIdMap = Object.fromEntries(
+      attendanceMemberIds.map((attendance) => [
+        attendance.memberId.memberId,
+        attendance,
+      ])
+    );
+
+    if (memberIds.length !== attendanceMemberIds.length) {
+      throw new ParameterError(
+        'グループに重複して参加しているメンバーもしくは参加していないメンバーが存在します。'
+      );
+    }
+
+    if (
+      memberIds.some((memberId) => !attendanceMemberIdMap[memberId.memberId])
+    ) {
+      throw new ParameterError(
+        '参加予定ではないメンバーがグループに存在しています。'
+      );
+    }
+
+    this.param.groups = [...groups];
   }
 
   toDto(): TeaPartyDto {
