@@ -11,6 +11,7 @@ import { TeaPartyCreateMostRecentUsecase } from '../../applications/tea-party-cr
 import { TeaPartyDetailQuery } from '../../applications/tea-party-detail-query';
 import { TeaPartyQueryFactory } from '@/factory/tea-party-query-factory';
 import { TeaPartyListEventDateQueryUsecase } from '../../applications/tea-party-list-event-date-query-usecase';
+import { TeaPartyGroupSaveUsecase } from '../../applications/tea-party-group-save-usecase';
 
 export const router = Express.Router();
 
@@ -70,6 +71,34 @@ router.post(
       );
       await usecase.execute({ today: new Date() });
     }
+  })
+);
+
+router.put(
+  '/groups',
+  requestWrapper(async (req) => {
+    const { groups, eventDate } = req.body;
+
+    if (typeof eventDate !== 'string' || !Array.isArray(groups)) {
+      throw new ParameterError('パラメーターが不正です');
+    }
+    console.log(JSON.stringify(groups, null, 4), eventDate);
+
+    if (!process.env.INCOMMING_WEB_HOOK) {
+      throw new Error('Slack用の環境変数が未設定です。');
+    }
+
+    const usecase = new TeaPartyGroupSaveUsecase({
+      teaPartyRepository: TeaPartyRepositoryFactory.getInstance(),
+      memberRepository: MemberRepositoryFactory.getInstance(),
+      teaPartyNotificationGateway:
+        TeaPartyNotificationGatewayFactory.getInstance(),
+    });
+
+    await usecase.execute({
+      eventDate,
+      groups,
+    });
   })
 );
 

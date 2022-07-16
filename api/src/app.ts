@@ -15,7 +15,7 @@ const LISTEN_HOST = process.env.HOST ?? '0.0.0.0';
   });
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     if (req.method === 'OPTIONS') {
