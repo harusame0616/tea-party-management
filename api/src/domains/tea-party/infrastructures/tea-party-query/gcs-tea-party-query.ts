@@ -30,9 +30,10 @@ export class GcsTeaPartyQuery implements TeaPartyQuery {
 
   async listEventDate(): Promise<Date[]> {
     const [files] = await this.bucket.getFiles({ prefix: this.basePath });
-    return files.map(
-      (file) => new Date(parseInt(path.basename(file.name, '.json')))
-    );
+    return files
+      .map((file) => parseInt(path.basename(file.name, '.json')))
+      .sort((a, b) => a - b)
+      .map((unixtime) => new Date(unixtime));
   }
 
   async teaPartyDetailByEventDate(
