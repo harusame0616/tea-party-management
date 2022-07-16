@@ -1,4 +1,4 @@
-import { MemberRepository } from '@/domains/member/member-repository';
+import { MemberRepository } from '@/domains/member/applications/member-repository';
 import { MemberId } from '@/domains/member/models/memberId';
 import { NotFoundError } from '@/errors/not-found-error';
 import { EventDate } from '../models/event-date';

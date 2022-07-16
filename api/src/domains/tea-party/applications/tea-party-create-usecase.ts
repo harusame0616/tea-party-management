@@ -1,5 +1,5 @@
+import { MemberRepository } from '@/domains/member/applications/member-repository';
 import { ConflictError } from '@/errors/conflict-error';
-import { MemberRepository } from '../../member/member-repository';
 import { TeaPartyCreateService } from '../domain-services/tea-party-create-service';
 import { EventDate } from '../models/event-date';
 import { TeaPartyNotificationGateway } from './tea-party-notification-gateway';

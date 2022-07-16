@@ -1,5 +1,5 @@
+import { MemberRepository } from '@/domains/member/applications/member-repository';
 import { TeaParty, TeaPartyCreateParam } from '../models/tea-party';
-import { MemberRepository } from '../../member/member-repository';
 
 export type TeaPartyCreateServiceParam = Omit<
   TeaPartyCreateParam,

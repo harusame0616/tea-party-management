@@ -1,5 +1,5 @@
 import { GcsRepository } from '@/domains/common/infrastracture/gcs-repository';
-import { MemberRepository } from '../member-repository';
+import { MemberRepository } from '../applications/member-repository';
 import { Member, MemberDto } from '../models/member';
 
 export class GcsMemberRepository

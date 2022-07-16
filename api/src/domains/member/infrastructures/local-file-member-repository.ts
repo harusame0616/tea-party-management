@@ -1,7 +1,7 @@
-import { MemberRepository } from 'domains/member/member-repository';
 import { Member, MemberDto } from 'domains/member/models/member';
 import fs from 'fs/promises';
 import path from 'path';
+import { MemberRepository } from '../applications/member-repository';
 
 export class LocalFileMemberRepository implements MemberRepository {
   static DIR = path.join('.store', 'member');

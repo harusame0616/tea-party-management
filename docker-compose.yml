@@ -20,3 +20,11 @@ services:
       - ./:/project:delegated
     ports:
       - 50010:3000
+  app:
+    build:
+      context: ./app
+      target: develop
+    volumes:
+      - ./:/project:delegated
+    ports:
+      - 50100:3000

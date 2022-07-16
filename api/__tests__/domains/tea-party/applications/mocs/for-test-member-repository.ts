@@ -1,4 +1,4 @@
-import { MemberRepository } from 'domains/member/member-repository';
+import { MemberRepository } from '@/domains/member/applications/member-repository';
 import { Member } from 'domains/member/models/member';
 
 export class ForTestMemberRepository implements MemberRepository {
